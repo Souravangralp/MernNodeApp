@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "chrome",
+            "name": "http://localhost:8080/getAll",
+            "request": "launch",
+            "url": "http://localhost:8080/getAll"
+        }
+    ]
+}
