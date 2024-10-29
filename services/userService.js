@@ -5,7 +5,7 @@ const db = require('../models/index');
 
 class UserService {
 
-    async Create(userData) {
+    async create(userData) {
         const { firstname, lastname, email, phone,  password, } = userData;
     
         // Check if the user already exists
@@ -55,20 +55,22 @@ class UserService {
         return token;
     }
 
-    async GetAll()
+    async getAll()
     {
-        var users = await db.Users.findAll();
-
-        return users;
+        return await db.Users.findAll({
+            where: {
+                isActive: true
+              },
+          });
     }
 
-    async GetWithId(userId)
+    async getWithId(userId)
     {
         var user = await db.Users.findByPk(userId);
         return user;
     }
 
-    async Delete(userId)
+    async delete(userId)
     {
         const user = await db.Users.findByPk(userId);
 
@@ -83,6 +85,22 @@ class UserService {
         return response;
     }
 
+    async update(toBeEditedUser)
+    {
+        const user = await db.Users.findByPk(toBeEditedUser.id);
+
+        if(user == null) return {message : `Apologize for any inconvinence but we dont have any user with this id ${userId}`};
+
+        user.firstname = toBeEditedUser.firstname;
+        user.lastname = toBeEditedUser.lastname;
+        user.phone = toBeEditedUser.phone;
+        
+        const response = {message : `user associated with id : ${toBeEditedUser.id} has been updated.`};
+
+        await user.save();
+
+        return response;
+    }
 }
 
 module.exports =  new UserService();

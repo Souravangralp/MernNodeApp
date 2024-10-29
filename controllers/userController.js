@@ -5,7 +5,7 @@ const authenticateToken = require('../middlewares/authMiddleware'); // Adjust th
 
 router.get('/users', authenticateToken, async (req, res) => {
     try {
-        const users = await userService.GetAll();
+        const users = await userService.getAll();
         res.status(201).json(users); 
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -21,7 +21,7 @@ router.get('/users/:id', authenticateToken,  async (req, res) => {
             return res.status(400).json({ message: 'Invalid user ID' });
         }
 
-        const user = await userService.GetWithId(userId);
+        const user = await userService.getWithId(userId);
         
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -35,7 +35,7 @@ router.get('/users/:id', authenticateToken,  async (req, res) => {
 
 router.post('/users', authenticateToken,  async (req, res) => {
     try {
-        const user = await userService.Create(req.body);
+        const user = await userService.create(req.body);
         res.status(201).json(user); 
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -51,11 +51,20 @@ router.delete('/users/delete:id', authenticateToken, async (req, res) => {
             return res.status(400).json({ message: 'Invalid user ID' });
         }
 
-        const user = await userService.Delete(userId);
+        const user = await userService.delete(userId);
         
         res.status(200).json(user);
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+});
+
+router.put('/users', authenticateToken, async (req, res) => {
+    try {
+        const user = await userService.update(req.body);
+        res.status(201).json(user); 
+    } catch (error) {
+        res.status(400).json({ message: error.message });
     }
 });
 
